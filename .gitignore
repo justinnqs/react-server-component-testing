@@ -1,0 +1,5 @@
+/.vscode
+/pgdata
+/mydb.session.sql
+/client/node_modlues
+/server/node_modules

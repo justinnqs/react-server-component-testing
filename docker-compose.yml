@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Postgres db
+  db:
+    image: postgres:15-alpine
+    environment: 
+      - POSTGRES_DB=mydb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  # server
+  server:
+    image: server
+    depends_on:
+      - db
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes: 
+      - ./server:/app
+    container_name: server
+    ports:
+      - '4000:4000'
+
+  # client
+  client:
+    image: client
+    depends_on:
+      - db
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client:/app
+  
